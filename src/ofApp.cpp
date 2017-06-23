@@ -10,7 +10,7 @@ void ofApp::setup(){
     numTilesY = 7;
     
     pixelPitch = 16;
-    radius = 2.5;
+    radius = 5;
     
     
     // font loading
@@ -64,8 +64,18 @@ void ofApp::draw(){
         ofBackground(0);
     
         area.draw(0,0);
-    
-    
+	
+	
+//		SIMPLE GRADIENT
+//		glBegin(GL_QUADS);
+//		glColor3f( 1.0f, 0.0f, 0.0f );
+//		glVertex3f( 0.0f, 0.0f, 0.0f );
+//		glVertex3f( screen.getWidth(), 0.0f, 0.0f );
+//		glColor3f( 0.0f, 0.0f, 1.0f );
+//		glVertex3f( screen.getWidth(), screen.getHeight(), 0.0f );
+//		glVertex3f( 0.0f, screen.getHeight(), 0.0f );
+//		glEnd();
+	
         ofSetColor(255);
 	
 		string testString2 = "Nasjonalmuseet";
@@ -98,17 +108,21 @@ void ofApp::draw(){
     
         screen.getTexture().readToPixels(p);
         ofPushStyle();
-        
+	
+			glPointSize(radius);
+			glBegin(GL_POINTS);
             for (int x = 0; x < p.getWidth(); x++)
             {
                 for (int y = 0; y < p.getHeight(); y++)
                 {
                     ofColor c = p.getColor(x, y);
                     ofSetColor(c);
-                    ofDrawCircle(pixelPitch * x + (pixelPitch/2), pixelPitch * y + (pixelPitch/2), radius);
+					glVertex2f(pixelPitch * x + (pixelPitch/2), pixelPitch * y + (pixelPitch/2));
+                    //ofDrawCircle(pixelPitch * x + (pixelPitch/2), pixelPitch * y + (pixelPitch/2), radius);
                 }
             }
-        
+		glEnd();
+	
         ofPopStyle();
     
     preview.end();

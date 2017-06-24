@@ -19,14 +19,14 @@ using namespace ofxVoid;
 //--------------------------------------------------------------
 void ofApp::setup(){
     
-    
     // variables
     
     numTilesX = 9;
     numTilesY = 7;
     
-    pixelPitch = 16;
-    radius = 5;
+    pixelPerTile = 16;
+	pixelPitch = 10;
+    radius = 3;
     
     
     // font loading
@@ -34,10 +34,13 @@ void ofApp::setup(){
     
     area.load("areas/screen.png");
     
-    
+	
+	
     // allocate FBOs
+	
+
     
-    screen.allocate(numTilesX * pixelPitch, numTilesY * pixelPitch);
+    screen.allocate(numTilesX * pixelPerTile, numTilesY * pixelPerTile);
     
     screen.begin();
     ofClear(0,0,0,255);
@@ -60,14 +63,13 @@ void ofApp::setup(){
     path.close();
 	
 	
-	
+	// setup camera
+	cam.setDistance(2000);
 	
 	
 	// setup UI
 	//
-	//
-	
-	ui::init(1.0f);
+	ui::init(1.0f); // 2.0 if retina display (plist high res YES)
 	
 	_stage = ui::DisplayObject::create();
 	_stage->makeRootObject();
@@ -81,12 +83,12 @@ void ofApp::setup(){
 	_hcell->addComponent(_panel, ui::ResizeRule(ui::RESIZE_RULE_TYPE_STATIC, 200.0f * ui::scale));
 	_hcell->addComponent(_vcell);
 	_stage->addChild(_hcell);
-
 	
-	auto slider0 = ui::Slider<float>::create("Float Slider", &_myFloat, 10.0f, 200.0f);
-	_panel->addComponent(slider0);
 	
-	auto label = ui::Label::create("lightBox");
+	
+	// add UI components
+	
+	auto label = ui::Label::create("Nasjonalmuseet 2020");
 	_panel->addComponent(label);
 	
 	auto fps = ui::FpsLabel::create();
@@ -94,23 +96,24 @@ void ofApp::setup(){
 	
 	_panel->addComponent(ui::Spacer::create(1));
 	
-	_panel->addComponent(ui::Toggle<bool>::create("My toggle", &_boolValue));
+	_panel->addComponent(ui::Toggle<bool>::create("Seq 1", &_sequenceOne));
 	
-	// color
 	_bgcolor = ofFloatColor(.1f, .1f, .1f);
 	_panel->addComponent(ui::ColorPicker<ofFloatColor>::create("Background color", &_bgcolor));
 	
-	// define parameters
-	_myFloatParam.set("floatparam 222", 1.0f, 0.0f, 10.0f);
+	_boxcolor.set(.05f, .05f, .05f);
+	_panel->addComponent(ui::ColorPicker<ofFloatColor>::create("Box color", &_boxcolor));
+	
+	_plexiTransparency = 10;
+	auto plexiSlider = ui::Slider<float>::create("Plexi transparency", &_plexiTransparency, 0, 255);
+	_panel->addComponent(plexiSlider);
 	
 
-	// add all parameters
-	_params.add(_myFloatParam);
 	
-	vector<ui::ComponentPtr> components = ui::createComponentsForParameterGroup(_params);
-	_panel->addComponents(components);
+	auto slider0 = ui::Slider<float>::create("Float Slider", &_myFloat, 1.0f, 200.0f);
+	_panel->addComponent(slider0);
 	
-    
+	y = 0;
 
 }
 
@@ -133,10 +136,10 @@ void ofApp::draw(){
     screen.begin();
         ofBackground(0);
     
-        area.draw(0,0);
+		area.draw(0,0);
 	
 	
-//		SIMPLE GRADIENT
+//		//SIMPLE GRADIENT
 //		glBegin(GL_QUADS);
 //		glColor3f( 1.0f, 0.0f, 0.0f );
 //		glVertex3f( 0.0f, 0.0f, 0.0f );
@@ -146,27 +149,32 @@ void ofApp::draw(){
 //		glVertex3f( 0.0f, screen.getHeight(), 0.0f );
 //		glEnd();
 	
+		path.draw();
+	
+		if (_sequenceOne == true) {
+			ofSetColor(255);
+			ofSetLineWidth(2);
+			ofDrawLine(0, y, screen.getWidth(), y);
+			
+			if (y >= screen.getHeight()) {
+				y = 0;
+			}
+			y++;
+		}
+	
         ofSetColor(255);
 	
 		string testString2 = "Nasjonalmuseet";
 		text.calculate(font, testString2);
-		text.draw(ofGetMouseX() - (ofGetWidth() - screen.getWidth()),ofGetMouseY());
+		text.draw(ofGetMouseX() - (ofGetWidth() - screen.getWidth()),ofGetMouseY() + 10);
 	
 	
-        //ofDrawRectangle(60, 60, 30, 30);
-    
-        //path.draw();
-    
-
-    
-    
-//        for (int x = 0; x < screen.getWidth(); x++) {
-//            for (int y = 0; y < screen.getHeight(); y++) {
-//                ofSetColor(ofRandom(255));
-//                ofDrawRectangle(x, y, 1, 1);
-//            }
-//        }
-    
+		//drawCursor(ofGetMouseX() - (ofGetWidth() - screen.getWidth()),ofGetMouseY());
+	
+	
+	
+		drawCursor(ofMap(ofGetMouseX(), 0, ofGetWidth(), 0, screen.getWidth()), ofMap(ofGetMouseY(), 0, ofGetHeight(), 0, screen.getHeight()));
+	
     screen.end();
     
     
@@ -188,7 +196,6 @@ void ofApp::draw(){
                     ofColor c = p.getColor(x, y);
                     ofSetColor(c);
 					glVertex2f(pixelPitch * x + (pixelPitch/2), pixelPitch * y + (pixelPitch/2));
-                    //ofDrawCircle(pixelPitch * x + (pixelPitch/2), pixelPitch * y + (pixelPitch/2), radius);
                 }
             }
 		glEnd();
@@ -212,12 +219,41 @@ void ofApp::draw(){
     
     // display preview
     
-    //cam.begin();
-    
-        //preview.draw(ofGetWidth()/2 - side/2,ofGetHeight()/2 - side/2, screen.getWidth() * 10, screen.getHeight() * 10);
-        preview.draw(0,0, screen.getWidth() * 10, screen.getHeight() * 10);
-    
-    //cam.end();
+    cam.begin();
+	
+		ofPushMatrix();
+			//preview.draw(ofGetWidth()/2 - side/2,ofGetHeight()/2 - side/2, screen.getWidth() * 10, screen.getHeight() * 10);
+			ofTranslate(-preview.getWidth()/2, -preview.getHeight()/2);
+			ofPushStyle();
+				// draw valchromat box
+				ofSetColor(_boxcolor);
+				ofDrawBox(preview.getWidth()/2, preview.getHeight()/2, (-preview.getWidth()/2.4)/2, preview.getWidth(), preview.getHeight(), -preview.getWidth()/2.4);
+				// draw plexi top
+				ofSetColor(255, 255, 255, _plexiTransparency);
+				ofDrawBox(preview.getWidth()/2, preview.getHeight()/2, 10, preview.getWidth(), preview.getHeight(), 20);
+	
+			ofPopStyle();
+			preview.draw(0,0, preview.getWidth(), preview.getHeight());
+	
+		ofPopMatrix();
+		
+		ofPushStyle();
+		
+			// draw vertical plexi
+			ofSetColor(255, 255, 255, _plexiTransparency);
+			ofTranslate(0, preview.getHeight()/2 + 5);
+			for (int i = 0; i < 26; i++) {
+				int startY = -19 * pixelPitch;
+				int yStep = 3 * pixelPitch;
+				int height = 150; //millimeters
+				int thickness = 5; //millimeters
+				ofDrawBox(0, startY - (yStep * i), 100, 104 * pixelPitch, thickness, height);
+			}
+		
+		ofPopStyle();
+		ofDisableDepthTest();
+	
+    cam.end();
     
     
     
@@ -249,41 +285,6 @@ void ofApp::keyPressed(int key){
 }
 
 //--------------------------------------------------------------
-void ofApp::keyReleased(int key){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseMoved(int x, int y ){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseDragged(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mousePressed(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseReleased(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseEntered(int x, int y){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseExited(int x, int y){
-
-}
-
-//--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
 	
 	// calculate UI size
@@ -292,12 +293,24 @@ void ofApp::windowResized(int w, int h){
 
 }
 
-//--------------------------------------------------------------
-void ofApp::gotMessage(ofMessage msg){
 
+void ofApp::drawCursor(int x, int y){
+	
+	//top left
+	ofDrawRectangle(x-2, y-2, 1, 1);
+	ofDrawRectangle(x-1, y-1, 1, 1);
+	
+	//top right
+	ofDrawRectangle(x+2, y-2, 1, 1);
+	ofDrawRectangle(x+1, y-1, 1, 1);
+	
+	//low left
+	ofDrawRectangle(x-2, y+2, 1, 1);
+	ofDrawRectangle(x-1, y+1, 1, 1);
+	
+	//low right
+	ofDrawRectangle(x+2, y+2, 1, 1);
+	ofDrawRectangle(x+1, y+1, 1, 1);
+	
 }
 
-//--------------------------------------------------------------
-void ofApp::dragEvent(ofDragInfo dragInfo){ 
-
-}

@@ -15,23 +15,18 @@ class ofApp : public ofBaseApp{
 		void draw();
 
 		void keyPressed(int key);
-		void keyReleased(int key);
-		void mouseMoved(int x, int y );
-		void mouseDragged(int x, int y, int button);
-		void mousePressed(int x, int y, int button);
-		void mouseReleased(int x, int y, int button);
-		void mouseEntered(int x, int y);
-		void mouseExited(int x, int y);
 		void windowResized(int w, int h);
-		void dragEvent(ofDragInfo dragInfo);
-		void gotMessage(ofMessage msg);
+	
+		void drawCursor(int x, int y);
+
     
     ofFbo screen;
     ofFbo preview;
 
     ofEasyCam cam;
     
-    int pixelPitch;
+    int pixelPerTile;
+	int pixelPitch;
     
     float radius;
     
@@ -55,17 +50,19 @@ class ofApp : public ofBaseApp{
 
 	shared_ptr<ofxVoid::ui::CellLayout> _hcell;
 	shared_ptr<ofxVoid::ui::CellLayout> _vcell;
-	
 	ofxVoid::ui::DisplayObjectPtr _stage;
 	ofxVoid::ui::PanelPtr _panel;
 	
-	ofParameterGroup _params;
-	
-	ofParameter<float> _myFloatParam;
-	
+	// UI variables
 	ofFloatColor _bgcolor;
+	ofFloatColor _boxcolor;
+	float _plexiTransparency;
 	
-	bool _boolValue;
+	
+	bool _sequenceOne;
+	
+	
+	int y;
 
 	
 		

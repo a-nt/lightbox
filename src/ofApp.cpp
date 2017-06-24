@@ -1,4 +1,20 @@
 #include "ofApp.h"
+#include "ofxVoid/ui/ui.h"
+#include "ofxVoid/ui/Rectangle.h"
+//#include "ofxVoid/ui/Circle.h"
+#include "ofxVoid/ui/Button.h"
+#include "ofxVoid/ui/Slider.h"
+//#include "ofxVoid/ui/RangeSlider.h"
+#include "ofxVoid/ui/Label.h"
+#include "ofxVoid/ui/FpsLabel.h"
+#include "ofxVoid/ui/ValueLabel.h"
+//#include "ofxVoid/ui/Circle.h"
+#include "ofxVoid/ui/Toggle.h"
+#include "ofxVoid/ui/Spacer.h"
+//#include "ofxVoid/ui/StarDiagram.h"
+#include "ofxVoid/ui/ColorPicker.h"
+
+using namespace ofxVoid;
 
 //--------------------------------------------------------------
 void ofApp::setup(){
@@ -42,20 +58,74 @@ void ofApp::setup(){
     path.lineTo(40,40);
     path.lineTo(20,40);
     path.close();
+	
+	
+	
+	
+	
+	// setup UI
+	//
+	//
+	
+	ui::init(1.0f);
+	
+	_stage = ui::DisplayObject::create();
+	_stage->makeRootObject();
+	_stage->disableAutoUpdate();
+	_stage->disableAutoDraw();
+	
+	_panel = ui::Panel::create(ofRectangle(0, 0, 300 * ui::scale, 500 * ui::scale));
+	
+	_vcell = ui::CellLayout::create(true);
+	_hcell = ui::CellLayout::create(false);
+	_hcell->addComponent(_panel, ui::ResizeRule(ui::RESIZE_RULE_TYPE_STATIC, 200.0f * ui::scale));
+	_hcell->addComponent(_vcell);
+	_stage->addChild(_hcell);
+
+	
+	auto slider0 = ui::Slider<float>::create("Float Slider", &_myFloat, 10.0f, 200.0f);
+	_panel->addComponent(slider0);
+	
+	auto label = ui::Label::create("lightBox");
+	_panel->addComponent(label);
+	
+	auto fps = ui::FpsLabel::create();
+	_panel->addComponent(fps);
+	
+	_panel->addComponent(ui::Spacer::create(1));
+	
+	_panel->addComponent(ui::Toggle<bool>::create("My toggle", &_boolValue));
+	
+	// color
+	_bgcolor = ofFloatColor(.1f, .1f, .1f);
+	_panel->addComponent(ui::ColorPicker<ofFloatColor>::create("Background color", &_bgcolor));
+	
+	// define parameters
+	_myFloatParam.set("floatparam 222", 1.0f, 0.0f, 10.0f);
+	
+
+	// add all parameters
+	_params.add(_myFloatParam);
+	
+	vector<ui::ComponentPtr> components = ui::createComponentsForParameterGroup(_params);
+	_panel->addComponents(components);
+	
     
 
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    
+	
+	// update UI elements
+	_stage->update(ofGetElapsedTimef(), 0.0f);
 
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
     
-    ofSetBackgroundColor(30);
+    ofSetBackgroundColor(_bgcolor);
     
     
     // draw to FBO
@@ -167,6 +237,9 @@ void ofApp::draw(){
     ofSetColor(65);
     font.drawString(fpsStr, 15,20);
     ofPopStyle();
+	
+	_stage->draw();
+	
 
 }
 
@@ -212,6 +285,10 @@ void ofApp::mouseExited(int x, int y){
 
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
+	
+	// calculate UI size
+	_hcell->setWidth(w);
+	_hcell->setHeight(h);
 
 }
 

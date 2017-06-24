@@ -2,6 +2,10 @@
 
 #include "ofMain.h"
 #include "Text.hpp"
+#include "ofxVoid/ui/DisplayObject.h"
+#include "ofxVoid/ui/Panel.h"
+#include "ofxVoid/ui/CellLayout.h"
+#include "ofxVoid/ui/Scene3D.h"
 
 class ofApp : public ofBaseApp{
 
@@ -43,6 +47,26 @@ class ofApp : public ofBaseApp{
     
     int numTilesX;
     int numTilesY;
+	
+	float _myFloat;
+	
+	
+	// UI
 
+	shared_ptr<ofxVoid::ui::CellLayout> _hcell;
+	shared_ptr<ofxVoid::ui::CellLayout> _vcell;
+	
+	ofxVoid::ui::DisplayObjectPtr _stage;
+	ofxVoid::ui::PanelPtr _panel;
+	
+	ofParameterGroup _params;
+	
+	ofParameter<float> _myFloatParam;
+	
+	ofFloatColor _bgcolor;
+	
+	bool _boolValue;
+
+	
 		
 };

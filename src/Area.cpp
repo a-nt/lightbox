@@ -7,7 +7,9 @@
 #include "Area.hpp"
 
 Area::Area(){
-	//inReach = false;
+	
+	inReach = false;
+	alpha = 0;
 	
 }
 
@@ -49,8 +51,27 @@ void Area::detect(ofImage tex, int distX, int distY) {
 void Area::draw(int x, int y) {
 	
 	if (inReach == true) {
-		_texture.draw(x,y);
+	
+		alpha += 20;
 	}
+	
+	else if (inReach == false) {
+		
+		alpha -= 10;
+
+	}
+	
+	if (alpha <= 0) {
+		alpha = 0;
+	}
+	if (alpha >= 255) {
+		alpha = 255;
+	}
+	
+	ofEnableAlphaBlending();
+	ofSetColor(255, 255, 255, alpha);
+	_texture.draw(x,y);
+	ofDisableAlphaBlending();
 
 	
 }

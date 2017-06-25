@@ -45,6 +45,11 @@ void Area::detect(ofImage tex, int distX, int distY) {
 		inReach = false;
 	}
 	
+}
+
+bool Area::isBusy() {
+	
+	return inReach;
 	
 }
 

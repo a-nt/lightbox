@@ -26,6 +26,7 @@ class ofApp : public ofBaseApp{
     
     ofFbo screen;
     ofFbo preview;
+	ofPixels p;
 
     ofEasyCam cam;
 	
@@ -37,9 +38,6 @@ class ofApp : public ofBaseApp{
     float radius;
 	
 	
-    ofPixels p;
-
-    ofPath path;
     
     //fonts
     ofTrueTypeFont font;
@@ -48,11 +46,6 @@ class ofApp : public ofBaseApp{
 	Text text;
 	Text areaText;
 	Text headerText;
-    
-    ofImage area;
-
-	
-	float _myFloat;
 	
 	
 	// UI
@@ -72,15 +65,25 @@ class ofApp : public ofBaseApp{
 	
 	bool _sequenceOne;
 	bool _sequenceTwo;
+	bool _sequenceThree;
 	
 	
 	// temporary
 	
 	int s1y;
 
-	ofPixels areaP;
+
 	
-	Area firstArea;
+	
+	// directory area check
+	string path;
+	ofDirectory dir;
+	
+	vector<ofImage> areaImages;
+	vector<Area> areaList;
+	
+	
+	
 	
 	
 	

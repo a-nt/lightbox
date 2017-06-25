@@ -104,22 +104,30 @@ void ofApp::setup(){
 	
 	_panel->addComponent(ui::Toggle<bool>::create("Seq 1", &_sequenceOne));
 	_panel->addComponent(ui::Toggle<bool>::create("Seq 2", &_sequenceTwo));
+	_panel->addComponent(ui::Toggle<bool>::create("Seq 3", &_sequenceThree));
 	
 	
 	
-	// paths testing
-	
-	path.moveTo(10,20);
-	path.lineTo(40,20);
-	path.lineTo(40,40);
-	path.lineTo(20,40);
-	path.close();
-	
-	
-	// png testing
-	area.load("areas/screen.png");
 
 	
+	
+	//scan area directory and fill arrays
+	path = "areas";
+	dir.open(path);
+	//only show png files
+	dir.allowExt("png");
+	//populate the directory object
+	dir.listDir();
+	
+	//go through and print out all the paths
+	for(int i = 0; i < dir.size(); i++){
+		ofLogNotice(dir.getPath(i));
+		ofImage img;
+		img.load(dir.getPath(i));
+		areaImages.push_back(img);
+		Area area;
+		areaList.push_back(area);
+	}
 
 }
 
@@ -129,9 +137,11 @@ void ofApp::update(){
 	// update UI elements
 	_stage->update(ofGetElapsedTimef(), 0.0f);
 	
+	
 	// control coordinates (switch with Kinect)
 	gx = ofGetMouseX() - 28;
 	gy = ofGetMouseY() - 28;
+	
 	
 	// disable UI and camera interruption
 	if (mouseX <= 200) {
@@ -140,7 +150,11 @@ void ofApp::update(){
 		cam.enableMouseInput();
 	}
 	
-	firstArea.detect(area, gx, gy);
+	
+	//loop through images in dir
+	for(int i = 0; i < dir.size(); i++){
+		areaList[i].detect(areaImages[i], gx, gy);
+	}
 	
 }
 
@@ -155,21 +169,14 @@ void ofApp::draw(){
     screen.begin();
         ofBackground(0);
 	
-		firstArea.draw(0, 0);
+	
+		// draw areas
+		for(int i = 0; i < dir.size(); i++){
+			areaList[i].draw(0,0);
+		}
 
 	
-	
-//		//SIMPLE GRADIENT
-//		glBegin(GL_QUADS);
-//		glColor3f( 1.0f, 0.0f, 0.0f );
-//		glVertex3f( 0.0f, 0.0f, 0.0f );
-//		glVertex3f( screen.getWidth(), 0.0f, 0.0f );
-//		glColor3f( 0.0f, 0.0f, 1.0f );
-//		glVertex3f( screen.getWidth(), screen.getHeight(), 0.0f );
-//		glVertex3f( 0.0f, screen.getHeight(), 0.0f );
-//		glEnd();
-	
-		//path.draw();
+
 	
 		if (_sequenceOne == true) {
 			ofSetColor(255);
@@ -182,13 +189,6 @@ void ofApp::draw(){
 			s1y++;
 		}
 	
-        ofSetColor(255);
-	
-		string testString2 = "NASJONALMUSEET 2020";
-		text.calculate(font, testString2);
-	
-		text.draw(screen.getWidth()/2,screen.getHeight() - 9);
-	
 	
 		if (_sequenceTwo == true) {
 			string dateString = ofToString(ofGetSeconds());
@@ -198,8 +198,18 @@ void ofApp::draw(){
 		}
 	
 	
+		if (_sequenceThree == true) {
+			
+		}
 	
-
+	
+        ofSetColor(255);
+	
+		string testString2 = "NASJONALMUSEET 2020";
+		text.calculate(font, testString2);
+	
+		text.draw(screen.getWidth()/2,screen.getHeight() - 9);
+	
 	
 	
 		if (_showCursor) {
@@ -238,16 +248,10 @@ void ofApp::draw(){
     
     
     
-    // aspect ratio calculation
-    
-    int side = ofGetWidth();
-    if (ofGetHeight() < side) {
-        side = ofGetHeight();
-    }
+
     
     
-    
-    
+	
     // display preview
     
     cam.begin();

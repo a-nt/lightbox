@@ -5,6 +5,7 @@ public:
 	
 	void detect(ofImage tex, int distX, int distY);
 	void draw(int x, int y);
+	bool isBusy();
 	
 	Area();
 	
@@ -14,6 +15,7 @@ public:
 	ofPixels p;
 	
 	bool inReach;
+	bool busy;
 	int numPxInBounds;
 	
 	float alpha;

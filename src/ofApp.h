@@ -19,29 +19,33 @@ class ofApp : public ofBaseApp{
 	
 		void drawCursor(int x, int y);
 
+	
+	int x;
+	int y;
     
     ofFbo screen;
     ofFbo preview;
 
     ofEasyCam cam;
-    
+	
+	int numTilesX;
+	int numTilesY;
+	
     int pixelPerTile;
 	int pixelPitch;
-    
     float radius;
-    
+	
+	
     ofPixels p;
-    
     ofPath path;
     
     //fonts
     ofTrueTypeFont font;
 	Text text;
+	Text areaText;
     
     ofImage area;
-    
-    int numTilesX;
-    int numTilesY;
+
 	
 	float _myFloat;
 	
@@ -58,11 +62,14 @@ class ofApp : public ofBaseApp{
 	ofFloatColor _boxcolor;
 	float _plexiTransparency;
 	
+	bool _showCursor;
+	
 	
 	bool _sequenceOne;
 	
 	
-	int y;
+	
+	int s1y;
 
 	
 		

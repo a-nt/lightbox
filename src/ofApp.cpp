@@ -19,7 +19,7 @@ using namespace ofxVoid;
 //--------------------------------------------------------------
 void ofApp::setup(){
     
-    // variables
+    // global variables
     
     numTilesX = 9;
     numTilesY = 7;
@@ -30,16 +30,11 @@ void ofApp::setup(){
     
     
     // font loading
-    font.load("fonts/hooge05_53.ttf", 6);
-    
-    area.load("areas/screen.png");
-    
+    font.load("fonts/hooge06_55.ttf", 6);
 	
 	
     // allocate FBOs
 	
-
-    
     screen.allocate(numTilesX * pixelPerTile, numTilesY * pixelPerTile);
     
     screen.begin();
@@ -52,15 +47,7 @@ void ofApp::setup(){
     preview.begin();
     ofClear(0, 0, 0, 255);
     preview.end();
-    
-    
-    // paths
-    
-    path.moveTo(10,20);
-    path.lineTo(40,20);
-    path.lineTo(40,40);
-    path.lineTo(20,40);
-    path.close();
+	
 	
 	
 	// setup camera
@@ -68,7 +55,7 @@ void ofApp::setup(){
 	
 	
 	// setup UI
-	//
+	
 	ui::init(1.0f); // 2.0 if retina display (plist high res YES)
 	
 	_stage = ui::DisplayObject::create();
@@ -88,6 +75,8 @@ void ofApp::setup(){
 	
 	// add UI components
 	
+	_panel->addComponent(ui::Spacer::create(6));
+	
 	auto label = ui::Label::create("Nasjonalmuseet 2020");
 	_panel->addComponent(label);
 	
@@ -96,7 +85,7 @@ void ofApp::setup(){
 	
 	_panel->addComponent(ui::Spacer::create(1));
 	
-	_panel->addComponent(ui::Toggle<bool>::create("Seq 1", &_sequenceOne));
+	_panel->addComponent(ui::Toggle<bool>::create("Show cursor", &_showCursor));
 	
 	_bgcolor = ofFloatColor(.1f, .1f, .1f);
 	_panel->addComponent(ui::ColorPicker<ofFloatColor>::create("Background color", &_bgcolor));
@@ -104,16 +93,29 @@ void ofApp::setup(){
 	_boxcolor.set(.05f, .05f, .05f);
 	_panel->addComponent(ui::ColorPicker<ofFloatColor>::create("Box color", &_boxcolor));
 	
-	_plexiTransparency = 10;
+	_plexiTransparency = 5;
 	auto plexiSlider = ui::Slider<float>::create("Plexi transparency", &_plexiTransparency, 0, 255);
 	_panel->addComponent(plexiSlider);
 	
-
+	_panel->addComponent(ui::Spacer::create(1));
 	
-	auto slider0 = ui::Slider<float>::create("Float Slider", &_myFloat, 1.0f, 200.0f);
-	_panel->addComponent(slider0);
+	_panel->addComponent(ui::Toggle<bool>::create("Seq 1", &_sequenceOne));
 	
-	y = 0;
+	
+	
+	
+	// paths testing
+	
+	path.moveTo(10,20);
+	path.lineTo(40,20);
+	path.lineTo(40,40);
+	path.lineTo(20,40);
+	path.close();
+	
+	
+	// png testing
+	area.load("areas/screen.png");
+	
 
 }
 
@@ -122,7 +124,17 @@ void ofApp::update(){
 	
 	// update UI elements
 	_stage->update(ofGetElapsedTimef(), 0.0f);
-
+	
+	// control coordinates (switch with Kinect)
+	x = ofGetMouseX() - 28;
+	y = ofGetMouseY() - 28;
+	
+	// disable UI and camera interruption
+	if (mouseX <= 200) {
+		cam.disableMouseInput();
+	} else {
+		cam.enableMouseInput();
+	}
 }
 
 //--------------------------------------------------------------
@@ -135,8 +147,18 @@ void ofApp::draw(){
     
     screen.begin();
         ofBackground(0);
-    
-		area.draw(0,0);
+	
+		ofPoint outline1;
+		outline1.set(17, 21);
+		if (ofDist(outline1.x, outline1.y, x, y) <= 40) {
+			area.draw(0,0);
+			string areaString = "440sqm";
+			areaText.calculate(font, areaString);
+			ofSetColor(255);
+			areaText.draw(40, 20);
+			
+		}
+
 	
 	
 //		//SIMPLE GRADIENT
@@ -149,31 +171,33 @@ void ofApp::draw(){
 //		glVertex3f( 0.0f, screen.getHeight(), 0.0f );
 //		glEnd();
 	
-		path.draw();
+		//path.draw();
 	
 		if (_sequenceOne == true) {
 			ofSetColor(255);
 			ofSetLineWidth(2);
-			ofDrawLine(0, y, screen.getWidth(), y);
+			ofDrawLine(0, s1y, screen.getWidth(), s1y);
 			
-			if (y >= screen.getHeight()) {
-				y = 0;
+			if (s1y >= screen.getHeight()) {
+				s1y = 0;
 			}
-			y++;
+			s1y++;
 		}
 	
         ofSetColor(255);
 	
-		string testString2 = "Nasjonalmuseet";
+		string testString2 = "NASJONALMUSEET 2020";
 		text.calculate(font, testString2);
-		text.draw(ofGetMouseX() - (ofGetWidth() - screen.getWidth()),ofGetMouseY() + 10);
+	
+		text.draw(screen.getWidth()/2,screen.getHeight() - 9);
 	
 	
-		//drawCursor(ofGetMouseX() - (ofGetWidth() - screen.getWidth()),ofGetMouseY());
+
 	
 	
-	
-		drawCursor(ofMap(ofGetMouseX(), 0, ofGetWidth(), 0, screen.getWidth()), ofMap(ofGetMouseY(), 0, ofGetHeight(), 0, screen.getHeight()));
+	if (_showCursor) {
+		drawCursor(x, y);
+	}
 	
     screen.end();
     
@@ -220,14 +244,15 @@ void ofApp::draw(){
     // display preview
     
     cam.begin();
-	
+
 		ofPushMatrix();
-			//preview.draw(ofGetWidth()/2 - side/2,ofGetHeight()/2 - side/2, screen.getWidth() * 10, screen.getHeight() * 10);
 			ofTranslate(-preview.getWidth()/2, -preview.getHeight()/2);
 			ofPushStyle();
+	
 				// draw valchromat box
 				ofSetColor(_boxcolor);
 				ofDrawBox(preview.getWidth()/2, preview.getHeight()/2, (-preview.getWidth()/2.4)/2, preview.getWidth(), preview.getHeight(), -preview.getWidth()/2.4);
+	
 				// draw plexi top
 				ofSetColor(255, 255, 255, _plexiTransparency);
 				ofDrawBox(preview.getWidth()/2, preview.getHeight()/2, 10, preview.getWidth(), preview.getHeight(), 20);
@@ -247,35 +272,19 @@ void ofApp::draw(){
 				int yStep = 3 * pixelPitch;
 				int height = 150; //millimeters
 				int thickness = 5; //millimeters
-				ofDrawBox(0, startY - (yStep * i), 100, 104 * pixelPitch, thickness, height);
+				ofDrawBox(0, startY - (yStep * i), height/2, 104 * pixelPitch, thickness, height);
 			}
 		
 		ofPopStyle();
-		ofDisableDepthTest();
 	
     cam.end();
     
-    
-    
-    
-    // display actual pixels preview (corner)
-    
-    screen.draw(ofGetWidth()-screen.getWidth(), 0, screen.getWidth(), screen.getHeight());
-    
-    
-    
-    
-    //display fps
-    
-    char fpsStr[255]; // an array of chars
-    sprintf(fpsStr, "FPS %f", ofGetFrameRate());
-    ofPushStyle();
-    ofSetColor(65);
-    font.drawString(fpsStr, 15,20);
-    ofPopStyle();
 	
+	// display UI
 	_stage->draw();
 	
+	// display actual pixels preview (corner)
+	screen.draw(28, 28, screen.getWidth(), screen.getHeight());
 
 }
 

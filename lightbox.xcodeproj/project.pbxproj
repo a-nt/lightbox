@@ -12,6 +12,7 @@
 		125506CD3E5F428AAFE5CC65 /* ofxTCPManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F399B91E98DC31CDA6DDACB4 /* ofxTCPManager.cpp */; };
 		18F03F534F44C15EFDF5E402 /* Text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DFA832E5B135A525142EABB0 /* Text.cpp */; };
 		53432544A72A9F670167253C /* ui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4D232311CCB2AD422F26060D /* ui.cpp */; };
+		5E52ACA51EFEC33D00DB153A /* lightbox-todo.md in Sources */ = {isa = PBXBuildFile; fileRef = 5E52ACA41EFEC33D00DB153A /* lightbox-todo.md */; };
 		66CA411C5A9664E27326BF36 /* ofxTCPServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1C085E327DAB912CFA2A443D /* ofxTCPServer.cpp */; };
 		960D20B191346612D5C05A6A /* ofxTCPClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF88F02779DD820913ACEA06 /* ofxTCPClient.cpp */; };
 		B568C12C85AFC9D69700F5D1 /* StarDiagram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 083D038679F0CA3716A8234E /* StarDiagram.cpp */; };
@@ -79,6 +80,7 @@
 		4811716B0413444780E87A81 /* ByteArray.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ByteArray.h; path = ../../../addons/ofxVoid/src/ofxVoid/core/ByteArray.h; sourceTree = SOURCE_ROOT; };
 		4D232311CCB2AD422F26060D /* ui.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ui.cpp; path = ../../../addons/ofxVoid/src/ofxVoid/ui/ui.cpp; sourceTree = SOURCE_ROOT; };
 		586190BB7C29900B0C11487B /* Component.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Component.h; path = ../../../addons/ofxVoid/src/ofxVoid/ui/Component.h; sourceTree = SOURCE_ROOT; };
+		5E52ACA41EFEC33D00DB153A /* lightbox-todo.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = "lightbox-todo.md"; sourceTree = SOURCE_ROOT; };
 		6EA9A6BDF970D16845CF028C /* Cursor.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Cursor.h; path = ../../../addons/ofxVoid/src/ofxVoid/ui/Cursor.h; sourceTree = SOURCE_ROOT; };
 		78941D57FB0D3D4D347C9E8B /* AllComponents.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = AllComponents.h; path = ../../../addons/ofxVoid/src/ofxVoid/ui/AllComponents.h; sourceTree = SOURCE_ROOT; };
 		797F2B6D12E4598AEE4E2DBB /* RangeSlider.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = RangeSlider.h; path = ../../../addons/ofxVoid/src/ofxVoid/ui/RangeSlider.h; sourceTree = SOURCE_ROOT; };
@@ -311,6 +313,7 @@
 			children = (
 				E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */,
 				E4EB6923138AFD0F00A09F29 /* Project.xcconfig */,
+				5E52ACA41EFEC33D00DB153A /* lightbox-todo.md */,
 				E4B69E1C0A3A1BDC003C02F2 /* src */,
 				E4EEC9E9138DF44700A80321 /* openFrameworks */,
 				BB4B014C10F69532006C3DED /* addons */,
@@ -432,6 +435,7 @@
 				18F03F534F44C15EFDF5E402 /* Text.cpp in Sources */,
 				960D20B191346612D5C05A6A /* ofxTCPClient.cpp in Sources */,
 				125506CD3E5F428AAFE5CC65 /* ofxTCPManager.cpp in Sources */,
+				5E52ACA51EFEC33D00DB153A /* lightbox-todo.md in Sources */,
 				66CA411C5A9664E27326BF36 /* ofxTCPServer.cpp in Sources */,
 				E2564CF7DDB3713772BB682E /* ofxUDPManager.cpp in Sources */,
 				ED3582D51BD77899C443EF17 /* Client.cpp in Sources */,

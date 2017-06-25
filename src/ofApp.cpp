@@ -27,10 +27,10 @@ void ofApp::setup(){
     pixelPerTile = 16;
 	pixelPitch = 10;
     radius = 3;
-    
-    
+	
     // font loading
     font.load("fonts/hooge06_55.ttf", 6);
+	headerFont.load("fonts/header17_68.ttf", 6);
 	
 	
     // allocate FBOs
@@ -85,7 +85,10 @@ void ofApp::setup(){
 	
 	_panel->addComponent(ui::Spacer::create(1));
 	
+	_showCursor = true;
 	_panel->addComponent(ui::Toggle<bool>::create("Show cursor", &_showCursor));
+	
+	_panel->addComponent(ui::Spacer::create(1));
 	
 	_bgcolor = ofFloatColor(.1f, .1f, .1f);
 	_panel->addComponent(ui::ColorPicker<ofFloatColor>::create("Background color", &_bgcolor));
@@ -100,7 +103,7 @@ void ofApp::setup(){
 	_panel->addComponent(ui::Spacer::create(1));
 	
 	_panel->addComponent(ui::Toggle<bool>::create("Seq 1", &_sequenceOne));
-	
+	_panel->addComponent(ui::Toggle<bool>::create("Seq 2", &_sequenceTwo));
 	
 	
 	
@@ -115,6 +118,7 @@ void ofApp::setup(){
 	
 	// png testing
 	area.load("areas/screen.png");
+
 	
 
 }
@@ -126,8 +130,8 @@ void ofApp::update(){
 	_stage->update(ofGetElapsedTimef(), 0.0f);
 	
 	// control coordinates (switch with Kinect)
-	x = ofGetMouseX() - 28;
-	y = ofGetMouseY() - 28;
+	gx = ofGetMouseX() - 28;
+	gy = ofGetMouseY() - 28;
 	
 	// disable UI and camera interruption
 	if (mouseX <= 200) {
@@ -148,15 +152,34 @@ void ofApp::draw(){
     screen.begin();
         ofBackground(0);
 	
-		ofPoint outline1;
-		outline1.set(17, 21);
-		if (ofDist(outline1.x, outline1.y, x, y) <= 40) {
-			area.draw(0,0);
-			string areaString = "440sqm";
-			areaText.calculate(font, areaString);
-			ofSetColor(255);
-			areaText.draw(40, 20);
-			
+//		ofPoint outline1;
+//		outline1.set(17, 21);
+//		if (ofDist(outline1.x, outline1.y, gx, gy) <= 40) {
+//			area.draw(0,0);
+//			string areaString = "440sqm";
+//			areaText.calculate(font, areaString);
+//			ofSetColor(255);
+//			areaText.draw(40, 20);
+//			
+//		}
+	
+	
+		// get bounds of image
+		area.getTexture().readToPixels(areaP);
+		
+		for (int x = 0; x < areaP.getWidth(); x++)
+		{
+			for (int y = 0; y < areaP.getHeight(); y++)
+			{
+				ofColor c = areaP.getColor(x, y);
+				if (c.getLightness() > 150) {
+					if (ofDist(x, y, gx, gy) <= 0) {
+						area.draw(0,0);
+					}
+				}
+				
+			}
+			cout << boundsY.size() << endl;
 		}
 
 	
@@ -192,12 +215,21 @@ void ofApp::draw(){
 		text.draw(screen.getWidth()/2,screen.getHeight() - 9);
 	
 	
+		if (_sequenceTwo == true) {
+			string dateString = ofToString(ofGetSeconds());
+			headerText.calculate(headerFont, dateString);
+			ofSetColor(255);
+			headerText.draw(screen.getWidth()/2, screen.getHeight()/2);
+		}
+	
+	
+	
 
 	
 	
-	if (_showCursor) {
-		drawCursor(x, y);
-	}
+		if (_showCursor) {
+			drawCursor(gx, gy);
+		}
 	
     screen.end();
     

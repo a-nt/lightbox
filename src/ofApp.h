@@ -20,8 +20,8 @@ class ofApp : public ofBaseApp{
 		void drawCursor(int x, int y);
 
 	
-	int x;
-	int y;
+	int gx;
+	int gy;
     
     ofFbo screen;
     ofFbo preview;
@@ -37,12 +37,16 @@ class ofApp : public ofBaseApp{
 	
 	
     ofPixels p;
+
     ofPath path;
     
     //fonts
     ofTrueTypeFont font;
+	ofTrueTypeFont headerFont;
+	
 	Text text;
 	Text areaText;
+	Text headerText;
     
     ofImage area;
 
@@ -66,11 +70,18 @@ class ofApp : public ofBaseApp{
 	
 	
 	bool _sequenceOne;
+	bool _sequenceTwo;
 	
 	
+	// temporary
 	
 	int s1y;
 
+	ofPixels areaP;
+	vector<int> boundsX;
+	vector<int> boundsY;
+	
+	
 	
 		
 };

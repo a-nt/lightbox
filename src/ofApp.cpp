@@ -139,6 +139,9 @@ void ofApp::update(){
 	} else {
 		cam.enableMouseInput();
 	}
+	
+	firstArea.detect(area, gx, gy);
+	
 }
 
 //--------------------------------------------------------------
@@ -151,6 +154,9 @@ void ofApp::draw(){
     
     screen.begin();
         ofBackground(0);
+	
+		firstArea.draw(0, 0);
+	
 	
 //		ofPoint outline1;
 //		outline1.set(17, 21);
@@ -165,22 +171,21 @@ void ofApp::draw(){
 	
 	
 		// get bounds of image
-		area.getTexture().readToPixels(areaP);
-		
-		for (int x = 0; x < areaP.getWidth(); x++)
-		{
-			for (int y = 0; y < areaP.getHeight(); y++)
-			{
-				ofColor c = areaP.getColor(x, y);
-				if (c.getLightness() > 150) {
-					if (ofDist(x, y, gx, gy) <= 0) {
-						area.draw(0,0);
-					}
-				}
-				
-			}
-			cout << boundsY.size() << endl;
-		}
+//		area.getTexture().readToPixels(areaP);
+//		
+//		for (int x = 0; x < areaP.getWidth(); x++)
+//		{
+//			for (int y = 0; y < areaP.getHeight(); y++)
+//			{
+//				ofColor c = areaP.getColor(x, y);
+//				if (c.getLightness() > 150) {
+//					if (ofDist(x, y, gx, gy) <= 0) {
+//						area.draw(0,0);
+//					}
+//				}
+//				
+//			}
+//		}
 
 	
 	

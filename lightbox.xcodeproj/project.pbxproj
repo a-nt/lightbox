@@ -13,6 +13,7 @@
 		18F03F534F44C15EFDF5E402 /* Text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DFA832E5B135A525142EABB0 /* Text.cpp */; };
 		53432544A72A9F670167253C /* ui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4D232311CCB2AD422F26060D /* ui.cpp */; };
 		5E52ACA51EFEC33D00DB153A /* lightbox-todo.md in Sources */ = {isa = PBXBuildFile; fileRef = 5E52ACA41EFEC33D00DB153A /* lightbox-todo.md */; };
+		5E898F5B1EFFE33200F13E1B /* Area.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5E898F591EFFE33200F13E1B /* Area.cpp */; };
 		66CA411C5A9664E27326BF36 /* ofxTCPServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1C085E327DAB912CFA2A443D /* ofxTCPServer.cpp */; };
 		960D20B191346612D5C05A6A /* ofxTCPClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF88F02779DD820913ACEA06 /* ofxTCPClient.cpp */; };
 		B568C12C85AFC9D69700F5D1 /* StarDiagram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 083D038679F0CA3716A8234E /* StarDiagram.cpp */; };
@@ -81,6 +82,8 @@
 		4D232311CCB2AD422F26060D /* ui.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ui.cpp; path = ../../../addons/ofxVoid/src/ofxVoid/ui/ui.cpp; sourceTree = SOURCE_ROOT; };
 		586190BB7C29900B0C11487B /* Component.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Component.h; path = ../../../addons/ofxVoid/src/ofxVoid/ui/Component.h; sourceTree = SOURCE_ROOT; };
 		5E52ACA41EFEC33D00DB153A /* lightbox-todo.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = "lightbox-todo.md"; sourceTree = SOURCE_ROOT; };
+		5E898F591EFFE33200F13E1B /* Area.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Area.cpp; sourceTree = "<group>"; };
+		5E898F5A1EFFE33200F13E1B /* Area.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Area.hpp; sourceTree = "<group>"; };
 		6EA9A6BDF970D16845CF028C /* Cursor.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Cursor.h; path = ../../../addons/ofxVoid/src/ofxVoid/ui/Cursor.h; sourceTree = SOURCE_ROOT; };
 		78941D57FB0D3D4D347C9E8B /* AllComponents.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = AllComponents.h; path = ../../../addons/ofxVoid/src/ofxVoid/ui/AllComponents.h; sourceTree = SOURCE_ROOT; };
 		797F2B6D12E4598AEE4E2DBB /* RangeSlider.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = RangeSlider.h; path = ../../../addons/ofxVoid/src/ofxVoid/ui/RangeSlider.h; sourceTree = SOURCE_ROOT; };
@@ -330,6 +333,8 @@
 				E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */,
 				DFA832E5B135A525142EABB0 /* Text.cpp */,
 				BD8F6B40893497720CEF0033 /* Text.hpp */,
+				5E898F591EFFE33200F13E1B /* Area.cpp */,
+				5E898F5A1EFFE33200F13E1B /* Area.hpp */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -444,6 +449,7 @@
 				F3F8086970CCE12C7E5F48B7 /* Server.cpp in Sources */,
 				C5BC1EC3CDD5D14A56EC9F2B /* Button.cpp in Sources */,
 				F640FD4AD0528809FBCAA68E /* Component.cpp in Sources */,
+				5E898F5B1EFFE33200F13E1B /* Area.cpp in Sources */,
 				062025AF9911E4834DC05A9C /* CursorOSX.mm in Sources */,
 				0CF4434C9EBFA874D880C5AF /* DisplayObject.cpp in Sources */,
 				C3A060B54D77675C744F880D /* Panel.cpp in Sources */,

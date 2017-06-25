@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "Text.hpp"
+#include "Area.hpp"
 #include "ofxVoid/ui/DisplayObject.h"
 #include "ofxVoid/ui/Panel.h"
 #include "ofxVoid/ui/CellLayout.h"
@@ -78,8 +79,9 @@ class ofApp : public ofBaseApp{
 	int s1y;
 
 	ofPixels areaP;
-	vector<int> boundsX;
-	vector<int> boundsY;
+	
+	Area firstArea;
+	
 	
 	
 	

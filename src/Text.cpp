@@ -1,9 +1,7 @@
 //
 //  Text.cpp
-//  EvryStockholmStairs
-//
-//  Created by Anders Nærø Tangen on 12/06/2017.
-//
+//  Calculate dimensions of ofTrueTypeFont
+//	Created by Anders NT - Void Studio
 //
 
 #include "Text.hpp"

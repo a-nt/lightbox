@@ -21,11 +21,9 @@ class ofApp : public ofBaseApp{
 		void drawCursor(int x, int y);
 		void drawSequences();
 	
-	
 
-	
-	int gx;
-	int gy;
+	int gx; // global x value
+	int gy; // global y value
     
     ofFbo screen;
     ofFbo preview;
@@ -46,7 +44,7 @@ class ofApp : public ofBaseApp{
     ofTrueTypeFont font;
 	ofTrueTypeFont headerFont;
 	
-	Text text;
+	//Text text;
 	Text areaText;
 	Text headerText;
 	
@@ -64,17 +62,10 @@ class ofApp : public ofBaseApp{
 	
 	bool _showCursor;
 	
-	
 	bool _sequenceOne;
 	bool _sequenceTwo;
 	bool _sequenceThree;
 	
-	
-	// temporary
-	
-	int s1y;
-
-
 	
 	
 	// directory area check
@@ -82,9 +73,17 @@ class ofApp : public ofBaseApp{
 	ofDirectory imgDir;
 	ofDirectory txtDir;
 	
+	// data
 	vector<ofImage> areaImages;
 	vector<Area> areaImageList;
-	vector<string> areaTextList;
+	vector<string> areaTextStrings;
+	vector<Text> areaTextList;
+	
+	
+	// temporary
+	
+	int s1y;
+	
 	
 	
 	

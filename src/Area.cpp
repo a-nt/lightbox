@@ -8,7 +8,7 @@
 
 Area::Area(){
 	
-	inReach = false;
+	//inReach = false;
 	alpha = 0;
 	
 }
@@ -47,23 +47,15 @@ void Area::detect(ofImage tex, int distX, int distY) {
 	
 }
 
-bool Area::isBusy() {
-	
-	return inReach;
-	
-}
 
 void Area::draw(int x, int y) {
 	
 	if (inReach == true) {
-	
 		alpha += 20;
 	}
 	
-	else if (inReach == false) {
-		
+	if (inReach == false) {
 		alpha -= 10;
-
 	}
 	
 	if (alpha <= 0) {
@@ -77,6 +69,13 @@ void Area::draw(int x, int y) {
 	ofSetColor(255, 255, 255, alpha);
 	_texture.draw(x,y);
 	ofDisableAlphaBlending();
+	
+	cout << alpha << endl;
 
+}
+
+bool Area::isBusy() {
+	
+	return inReach;
 	
 }

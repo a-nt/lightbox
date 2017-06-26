@@ -15,7 +15,6 @@ public:
 	ofPixels p;
 	
 	bool inReach;
-	bool busy;
 	int numPxInBounds;
 	
 	float alpha;

@@ -28,6 +28,9 @@ void ofApp::setup(){
 	pixelPitch = 10;
     radius = 3;
 	
+	ofDisableSmoothing();
+	ofSetFrameRate(60);
+	
     // font loading
     font.load("fonts/hooge06_55.ttf", 6);
 	headerFont.load("fonts/header17_68.ttf", 6);
@@ -90,7 +93,7 @@ void ofApp::setup(){
 	
 	_panel->addComponent(ui::Spacer::create(1));
 	
-	_bgcolor = ofFloatColor(.1f, .1f, .1f);
+	_bgcolor = ofFloatColor(.4f, .4f, .4f);
 	_panel->addComponent(ui::ColorPicker<ofFloatColor>::create("Background color", &_bgcolor));
 	
 	_boxcolor.set(.05f, .05f, .05f);
@@ -138,7 +141,14 @@ void ofApp::setup(){
 		ofLogNotice(txtDir.getPath(i));
 		ofBuffer buffer = ofBufferFromFile(txtDir.getPath(i));
 		string text = buffer.getText();
-		areaTextList.push_back(text);
+		areaTextStrings.push_back(text);
+		Text title;
+		areaTextList.push_back(title);
+	}
+	
+	//calculate text width
+	for (int i = 0; i < areaTextList.size(); i++) {
+		areaTextList[i].calculate(font, areaTextStrings[i]);
 	}
 
 }
@@ -151,12 +161,12 @@ void ofApp::update(){
 	
 	
 	// control coordinates (switch with Kinect)
-	gx = ofGetMouseX() - 28;
-	gy = ofGetMouseY() - 28;
+	gx = (ofGetMouseX() / ui::scale) - 28;
+	gy = (ofGetMouseY() / ui::scale) - 28;
 	
 	
 	// disable UI and camera interruption
-	if (mouseX <= 200) {
+	if (mouseX <= 200 * ui::scale) {
 		cam.disableMouseInput();
 	} else {
 		cam.enableMouseInput();
@@ -181,33 +191,21 @@ void ofApp::draw(){
     screen.begin();
         ofBackground(0);
 	
-	
 		// draw areas
 		for(int i = 0; i < imgDir.size(); i++){
-			areaImageList[i].draw(0,0);
+			//if (areaImageList[i].isBusy() == true) {
+				areaImageList[i].draw(0,0);
+				areaTextList[i].draw(screen.getWidth()/2, screen.getHeight() - 9);
+			//}
 		}
 	
-	
 		drawSequences();
-
-	
-        ofSetColor(255);
-	
-		//string testString2 = "NASJONALMUSEET 2020";
-		string testString2 = areaTextList[1];
-		text.calculate(font, testString2);
-	
-		text.draw(screen.getWidth()/2,screen.getHeight() - 9);
-	
-	
 	
 		if (_showCursor) {
 			drawCursor(gx, gy);
 		}
 	
     screen.end();
-    
-    
     
     
     // draw to preview
@@ -282,7 +280,7 @@ void ofApp::draw(){
 	_stage->draw();
 	
 	// display actual pixels preview (corner)
-	screen.draw(28, 28, screen.getWidth(), screen.getHeight());
+	screen.draw(28 * ui::scale, 28 * ui::scale, screen.getWidth() * ui::scale, screen.getHeight() * ui::scale);
 
 }
 
@@ -303,21 +301,29 @@ void ofApp::windowResized(int w, int h){
 
 void ofApp::drawCursor(int x, int y){
 	
-	//top left
-	ofDrawRectangle(x-2, y-2, 1, 1);
-	ofDrawRectangle(x-1, y-1, 1, 1);
+	ofPushStyle();
 	
-	//top right
-	ofDrawRectangle(x+2, y-2, 1, 1);
-	ofDrawRectangle(x+1, y-1, 1, 1);
+		ofSetColor(255,255,255,255);
+		
+		//top left
+		ofDrawRectangle(x-2, y-2, 1, 1);
+		ofDrawRectangle(x-1, y-1, 1, 1);
+		
+		//top right
+		ofDrawRectangle(x+2, y-2, 1, 1);
+		ofDrawRectangle(x+1, y-1, 1, 1);
+		
+		//low left
+		ofDrawRectangle(x-2, y+2, 1, 1);
+		ofDrawRectangle(x-1, y+1, 1, 1);
+		
+		//low right
+		ofDrawRectangle(x+2, y+2, 1, 1);
+		ofDrawRectangle(x+1, y+1, 1, 1);
 	
-	//low left
-	ofDrawRectangle(x-2, y+2, 1, 1);
-	ofDrawRectangle(x-1, y+1, 1, 1);
+	ofPopStyle();
 	
-	//low right
-	ofDrawRectangle(x+2, y+2, 1, 1);
-	ofDrawRectangle(x+1, y+1, 1, 1);
+	
 	
 }
 
@@ -370,12 +376,16 @@ void ofApp::drawSequences(){
 //					noiseX = 0;
 //				}
 				
-				ofSetColor(noiseX);
-				ofDrawRectangle(startX + x, startY + yStep, 1, 1);
+				glPointSize(1.0);
+				glBegin(GL_POINTS);
+				
+					ofSetColor(noiseX);
+					glVertex2f((startX + x) + 0.5, (startY + yStep) + 0.5);
+				
+				glEnd();
 				
 			}
 			
-		glEnd();
 
 		}
 		

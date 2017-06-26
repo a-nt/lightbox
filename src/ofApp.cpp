@@ -56,7 +56,7 @@ void ofApp::setup(){
 	
 	// setup UI
 	
-	ui::init(1.0f); // 2.0 if retina display (plist high res YES)
+	ui::init(2.0f); // 2.0 if retina display (plist high res YES)
 	
 	_stage = ui::DisplayObject::create();
 	_stage->makeRootObject();
@@ -108,25 +108,37 @@ void ofApp::setup(){
 	
 	
 	
-
-	
+	//
+	// FILE SCAN SYSTEM
+	//
 	
 	//scan area directory and fill arrays
 	path = "areas";
-	dir.open(path);
-	//only show png files
-	dir.allowExt("png");
-	//populate the directory object
-	dir.listDir();
 	
-	//go through and print out all the paths
-	for(int i = 0; i < dir.size(); i++){
-		ofLogNotice(dir.getPath(i));
+	//scan png images
+	imgDir.open(path);
+	imgDir.allowExt("png");
+	imgDir.listDir();
+	
+	for(int i = 0; i < imgDir.size(); i++){
+		//ofLogNotice(imgDir.getPath(i));
 		ofImage img;
-		img.load(dir.getPath(i));
+		img.load(imgDir.getPath(i));
 		areaImages.push_back(img);
 		Area area;
-		areaList.push_back(area);
+		areaImageList.push_back(area);
+	}
+	
+	// scan txt files
+	txtDir.open(path);
+	txtDir.allowExt("txt");
+	txtDir.listDir();
+	
+	for(int i = 0; i < txtDir.size(); i++){
+		ofLogNotice(txtDir.getPath(i));
+		ofBuffer buffer = ofBufferFromFile(txtDir.getPath(i));
+		string text = buffer.getText();
+		areaTextList.push_back(text);
 	}
 
 }
@@ -152,8 +164,8 @@ void ofApp::update(){
 	
 	
 	//loop through images in dir
-	for(int i = 0; i < dir.size(); i++){
-		areaList[i].detect(areaImages[i], gx, gy);
+	for(int i = 0; i < imgDir.size(); i++){
+		areaImageList[i].detect(areaImages[i], gx, gy);
 	}
 	
 }
@@ -171,41 +183,18 @@ void ofApp::draw(){
 	
 	
 		// draw areas
-		for(int i = 0; i < dir.size(); i++){
-			areaList[i].draw(0,0);
+		for(int i = 0; i < imgDir.size(); i++){
+			areaImageList[i].draw(0,0);
 		}
+	
+	
+		drawSequences();
 
-	
-
-	
-		if (_sequenceOne == true) {
-			ofSetColor(255);
-			ofSetLineWidth(2);
-			ofDrawLine(0, s1y, screen.getWidth(), s1y);
-			
-			if (s1y >= screen.getHeight()) {
-				s1y = 0;
-			}
-			s1y++;
-		}
-	
-	
-		if (_sequenceTwo == true) {
-			string dateString = ofToString(ofGetSeconds());
-			headerText.calculate(headerFont, dateString);
-			ofSetColor(255);
-			headerText.draw(screen.getWidth()/2, screen.getHeight()/2);
-		}
-	
-	
-		if (_sequenceThree == true) {
-			
-		}
-	
 	
         ofSetColor(255);
 	
-		string testString2 = "NASJONALMUSEET 2020";
+		//string testString2 = "NASJONALMUSEET 2020";
+		string testString2 = areaTextList[1];
 		text.calculate(font, testString2);
 	
 		text.draw(screen.getWidth()/2,screen.getHeight() - 9);
@@ -229,6 +218,7 @@ void ofApp::draw(){
         ofPushStyle();
 	
 			glPointSize(radius);
+			glEnable(GL_POINT_SMOOTH);
 			glBegin(GL_POINTS);
             for (int x = 0; x < p.getWidth(); x++)
             {
@@ -239,6 +229,7 @@ void ofApp::draw(){
 					glVertex2f(pixelPitch * x + (pixelPitch/2), pixelPitch * y + (pixelPitch/2));
                 }
             }
+	
 		glEnd();
 	
         ofPopStyle();
@@ -246,11 +237,7 @@ void ofApp::draw(){
     preview.end();
     
     
-    
-    
-
-    
-    
+	
 	
     // display preview
     
@@ -331,6 +318,68 @@ void ofApp::drawCursor(int x, int y){
 	//low right
 	ofDrawRectangle(x+2, y+2, 1, 1);
 	ofDrawRectangle(x+1, y+1, 1, 1);
+	
+}
+
+void ofApp::drawSequences(){
+	
+	if (_sequenceOne == true) {
+		ofSetColor(255);
+		ofSetLineWidth(2);
+		ofDrawLine(0, s1y, screen.getWidth(), s1y);
+		
+		if (s1y >= screen.getHeight()) {
+			s1y = 0;
+		}
+		s1y++;
+	}
+	
+	
+	if (_sequenceTwo == true) {
+		string dateString = ofToString(ofGetSeconds());
+		headerText.calculate(headerFont, dateString);
+		ofSetColor(255);
+		headerText.draw(screen.getWidth()/2, screen.getHeight()/2);
+	}
+	
+	
+	if (_sequenceThree == true) {
+		
+		for (int y = 0; y < 26; y++) {
+			int startX = 20;
+			int startY = 18;
+			int yStep = 3 * y;
+			
+			for (int x = 0; x < 104; x++) {
+				
+				int yPos = y * 5;
+				int xPos = x * 5;
+				
+				float noiseX = ofNoise(xPos/100.0f, yPos/100.0f, ofGetElapsedTimef()) * 200;
+				noiseX += ofNoise(xPos/50.0f, yPos/50.0f, ofGetElapsedTimef()/1.5f) * 25;
+				noiseX += ofNoise(xPos/50.0f, yPos/50.0f, ofGetElapsedTimef()/0.75f) * 10;
+				if (noiseX <= 0) { noiseX = 0; }
+				if (noiseX >= 255) { noiseX = 255; }
+//
+//				cout << noiseX << endl;
+//				
+//				float cutOffThreshold = 0.8;
+//				float randomNumber = ofRandom(1);
+//
+//				if (randomNumber <= cutOffThreshold) {
+//					noiseX = 0;
+//				}
+				
+				ofSetColor(noiseX);
+				ofDrawRectangle(startX + x, startY + yStep, 1, 1);
+				
+			}
+			
+		glEnd();
+
+		}
+		
+	}
 	
 }
 

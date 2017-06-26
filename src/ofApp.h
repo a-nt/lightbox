@@ -19,6 +19,9 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 	
 		void drawCursor(int x, int y);
+		void drawSequences();
+	
+	
 
 	
 	int gx;
@@ -46,7 +49,6 @@ class ofApp : public ofBaseApp{
 	Text text;
 	Text areaText;
 	Text headerText;
-	
 	
 	// UI
 
@@ -77,13 +79,12 @@ class ofApp : public ofBaseApp{
 	
 	// directory area check
 	string path;
-	ofDirectory dir;
+	ofDirectory imgDir;
+	ofDirectory txtDir;
 	
 	vector<ofImage> areaImages;
-	vector<Area> areaList;
-	
-	
-	
+	vector<Area> areaImageList;
+	vector<string> areaTextList;
 	
 	
 	

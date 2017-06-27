@@ -6,10 +6,10 @@
 [x]	Enkel Pauseanimasjon
 []	Partikkel pauseanimasjon
 [x]	Noise pauseanimasjon
-[]	Lese fra .txt fil sammen med .png
-[]	
-[]	
-[]	
+[x]	Lese fra .txt fil sammen med .png
+[x]	Bygge windows-prosjekt
+[]	Koble LED-tiles: JN er in
+[]	Porte kode til OF-Void
 []	
 []	
 []	
